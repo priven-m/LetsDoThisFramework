@@ -1,4 +1,4 @@
-#!C:\Users\PrivenM\Documents\BETRepos\AutomationFramework\venv\Scripts\python.exe
+#!C:\Users\PrivenM\Documents\BETRepos\LetsDoThisFramework\venv\Scripts\python.exe
 
 # Author:
 # Contact: grubert@users.sf.net
