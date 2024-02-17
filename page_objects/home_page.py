@@ -13,9 +13,9 @@ class HomePage(BasePage):
         self.page.get_by_title("My Account").click()
         self.page.keyboard.press("Enter")'''
     
-    '''def navigate_to_my_account(self):
+    def navigate_to_my_account(self):
         self.page.get_by_title("My Account").click()
-        self.page.keyboard.press("Enter")'''
+        self.page.keyboard.press("Enter")
     
     '''def navigate_to_my_wish_list(self):
         self.page.get_by_title("My Account").click()
