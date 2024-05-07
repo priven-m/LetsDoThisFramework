@@ -1,26 +1,16 @@
-from my_pages import login_page
+from site_pages import login_page
 from utils.playwright_manager import launch_browser
+from utils.config import baseUrl
+from test_data.login_test_data import login_credentials
 from playwright.sync_api import expect
 import pytest
-
-testData = {
-    "invalid": {
-        "username": "locked_out_user",
-        "password": "secret_sauce"
-    },
-    "valid": {
-        "username": "standard_user",
-        "password": "secret_sauce"
-    }
-}
-baseUrl = "https://www.saucedemo.com/"
 
 #  pytest tests/functional/test_file.py
 def test_successful_userlogin():
     with launch_browser() as (browser, page):
         lg_page = login_page.LoginPage(page)
         page.goto(baseUrl)
-        valid_credentials = testData.get("valid")
+        valid_credentials = login_credentials.get("valid")
         if valid_credentials:
             username = valid_credentials["username"]
             password = valid_credentials["password"]
@@ -36,7 +26,7 @@ def test_failed_userlogin():
     with launch_browser() as (browser, page):
         lg_page = login_page.LoginPage(page)
         page.goto(baseUrl)
-        invalid_credentials = testData.get("invalid")
+        invalid_credentials = login_credentials.get("invalid")
         if invalid_credentials:
             username = invalid_credentials["username"]
             password = invalid_credentials["password"]
