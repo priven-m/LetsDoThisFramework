@@ -1,5 +1,5 @@
 from site_pages.base_page import BasePage
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 
 class LoginPage(BasePage):
     def __init__(self, page: Page):
@@ -14,3 +14,9 @@ class LoginPage(BasePage):
     # Locators
     def login_error_message(self):
         self.page.locator("#login_button_container > div > form > h3")
+    
+    def login_page_title(self):
+        return self.page.title()
+
+    def login_page_textfields(self):
+        self.page.locator("#login_button_container")

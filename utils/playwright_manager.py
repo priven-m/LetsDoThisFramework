@@ -6,9 +6,11 @@ def launch_browser():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False, slow_mo=2000)
         context = browser.new_context()
+        context.tracing.start(screenshots=True, snapshots=True, sources=True)
         page = context.new_page()
         try:
             yield browser, page
         finally:
+            context.tracing.stop(path = "trace.zip")
             browser.close()
         
