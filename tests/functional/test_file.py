@@ -4,8 +4,24 @@ from utils.config import baseUrl
 from test_data.login_test_data import login_credentials
 from playwright.sync_api import expect
 import pytest
+import logging
 
 #  pytest tests/functional/test_file.py
+def test_site_landing_page():
+    with launch_browser() as (browser, page):
+        lg_page = login_page.LoginPage(page)
+        page.goto(baseUrl)
+        pg_title = login_credentials.get("pageTitle")
+        if pg_title:
+            expected_title = pg_title["page_title"]
+            if expected_title:
+                actual_title = lg_page.login_page_title()
+                assert actual_title == expected_title, f"Title mismatch. Expected: {expected_title}, Actual: {actual_title}"
+            else:
+                logging.info("Expected title not returned from test_data")
+        else:
+            logging.info("No page title returned from website")
+
 def test_successful_userlogin():
     with launch_browser() as (browser, page):
         lg_page = login_page.LoginPage(page)
@@ -18,9 +34,9 @@ def test_successful_userlogin():
                 lg_page.login_user(username, password)
                 expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
             except Exception as e:                
-                print("An error occurred:", e)
+                logging.info("An error occurred:", e)
         else:
-            print("No valid credentials found for testing.")
+            logging.info("No valid credentials found for testing.")
 
 def test_failed_userlogin():
     with launch_browser() as (browser, page):
@@ -34,6 +50,6 @@ def test_failed_userlogin():
                 lg_page.login_user(username, password)
                 expect(page).not_to_have_url("https://www.saucedemo.com/inventory.html")
             except Exception as e:                
-                print("An error occurred:", e)
+                logging.info("An error occurred:", e)
         else:
-            print("No invalid credentials provided. Test cannot proceed.")
+            logging.info("No invalid credentials provided. Test cannot proceed.")

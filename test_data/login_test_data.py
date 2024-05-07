@@ -6,5 +6,8 @@ login_credentials = {
     "valid": {
         "username": "standard_user",
         "password": "secret_sauce"
+    },
+    "pageTitle": {
+        "page_title": "Swag Labs"
     }
 }
