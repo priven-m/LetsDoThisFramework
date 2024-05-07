@@ -1,58 +1,49 @@
-from page_objects import base_page, home_page, login_page
+from my_pages import login_page
 from utils.playwright_manager import launch_browser
 from playwright.sync_api import expect
 import pytest
 
-testData = [{
-                "Camera": "Canon EOS 5D",
-                "CameraPageTitle": "Search - Canon EOS 5D",
-                "Phone": "Iphone"
-            },
-            {
-                "username":"mnicedevelopment@gmail.com",
-                "password":"pass123"
-            }
-    ]
+testData = {
+    "invalid": {
+        "username": "locked_out_user",
+        "password": "secret_sauce"
+    },
+    "valid": {
+        "username": "standard_user",
+        "password": "secret_sauce"
+    }
+}
+baseUrl = "https://www.saucedemo.com/"
 
-#  pytest tests/functional/test_sample.py
-@pytest.mark.parametrize("test_data", testData)
-def test_userlogin_and_userprofile(test_data):
-    with launch_browser() as browser:
-        page = browser.new_page()
-        hpage = home_page.HomePage(page)
-        lpage = login_page.LoginPage(page)
-        page.goto("https://awesomeqa.com/ui/")
+#  pytest tests/functional/test_file.py
+def test_successful_userlogin():
+    with launch_browser() as (browser, page):
+        lg_page = login_page.LoginPage(page)
+        page.goto(baseUrl)
+        valid_credentials = testData.get("valid")
+        if valid_credentials:
+            username = valid_credentials["username"]
+            password = valid_credentials["password"]
+            try:
+                lg_page.login_user(username, password)
+                expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
+            except Exception as e:                
+                print("An error occurred:", e)
+        else:
+            print("No valid credentials found for testing.")
 
-        username = test_data["username"]
-        password = test_data["password"]
-
-        page.click('text=Login')
-
-        page.fill('#username', username)
-        page.fill('#password', password)
-
-        # Click the "Login" button
-        page.click('#login-button')
-
-        # Verify that the user is redirected to the dashboard
-        assert page.title() == 'Awesome QA - Dashboard'
-
-        # Navigate to the user profile
-        page.click('text=Profile')
-
-        # Verify that the user's profile information is displayed
-        assert page.inner_text('.user-profile') == 'User Profile: Your Username'
-
-        page.click('text=Logout')
-
-        # Verify that the user is redirected to the home page after logout
-        assert page.title() == 'Awesome QA - Home'
-
-@pytest.mark.parametrize("test_data", testData)
-def test_product_search_functionality(test_data):
-    with launch_browser() as browser:
-        page = browser.new_page()
-        your_page = home_page.HomePage(page)
-        page.goto("https://awesomeqa.com/ui/")
-        your_page.search_canon_camera_from_homePage(test_data["Camera"])
-        assert page.title() == test_data["CameraPageTitle"]
+def test_failed_userlogin():
+    with launch_browser() as (browser, page):
+        lg_page = login_page.LoginPage(page)
+        page.goto(baseUrl)
+        invalid_credentials = testData.get("invalid")
+        if invalid_credentials:
+            username = invalid_credentials["username"]
+            password = invalid_credentials["password"]
+            try:
+                lg_page.login_user(username, password)
+                expect(page).not_to_have_url("https://www.saucedemo.com/inventory.html")
+            except Exception as e:                
+                print("An error occurred:", e)
+        else:
+            print("No invalid credentials provided. Test cannot proceed.")

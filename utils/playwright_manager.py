@@ -4,9 +4,11 @@ from contextlib import contextmanager
 @contextmanager
 def launch_browser():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=False, slow_mo=2000)
         context = browser.new_context()
         page = context.new_page()
-        yield browser
-        browser.close()
+        try:
+            yield browser, page
+        finally:
+            browser.close()
         
