@@ -10,5 +10,10 @@ class InventoryPage(BasePage):
         product_elements = self.page.locator(product_selector)
         return product_elements
     
-    def click_add_to_cart(self):
-        self.page.locator("#add-to-cart-sauce-labs-onesie").click()
+    def add_fleece_jacket_tocart(self):
+        self.page.locator("[data-test=\"add-to-cart-sauce-labs-fleece-jacket\"]").click()
+    
+    def navigate_to_cart(self):
+        self.page.locator("[data-test=\"shopping-cart-link\"]").click()
+    
+
