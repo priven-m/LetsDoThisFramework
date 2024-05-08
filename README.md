@@ -1,2 +1,3 @@
 # PrivenProjects
-This is a repo to house all my practice projects
+This is a repo to house my automation testing practice
+

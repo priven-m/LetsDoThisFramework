@@ -1,4 +1,4 @@
-login_credentials = {
+login_test_data = {
     "invalid": {
         "username": "locked_out_user",
         "password": "secret_sauce"
