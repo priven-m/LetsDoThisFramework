@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 from contextlib import contextmanager
 
+
 @contextmanager
 def launch_browser():
     with sync_playwright() as p:
@@ -11,6 +12,5 @@ def launch_browser():
         try:
             yield browser, page
         finally:
-            context.tracing.stop(path = "trace.zip")
+            context.tracing.stop(path="trace.zip")
             browser.close()
-        

@@ -6,8 +6,8 @@ from test_data.select_item_test_data import select_item_testdata
 from test_data.checkout_test_data import checkout_test_data
 from test_data.cart_test_data import cart_test_data
 from playwright.sync_api import expect
-import pytest
 import logging
+
 
 #  pytest tests/functional/test_file.py
 def test_site_landing_page():
@@ -28,6 +28,7 @@ def test_site_landing_page():
         else:
             logging.info("Credentials not valid to continue with this test")
 
+
 def test_successful_userlogin():
     with launch_browser() as (browser, page):
         lg_page = login_page.LoginPage(page)
@@ -39,10 +40,11 @@ def test_successful_userlogin():
             try:
                 lg_page.login_user(username, password)
                 expect(page).to_have_url("https://www.saucedemo.com/inventory.html")
-            except Exception as e:                
+            except Exception as e:
                 logging.info("An error occurred:")
         else:
             logging.info("Credentials not valid to continue with this test")
+
 
 def test_failed_userlogin():
     with launch_browser() as (browser, page):
@@ -55,15 +57,16 @@ def test_failed_userlogin():
             try:
                 lg_page.login_user(username, password)
                 expect(page).not_to_have_url("https://www.saucedemo.com/inventory.html")
-            except Exception as e:                
+            except Exception as e:
                 logging.info("An error occurred:")
         else:
             logging.info("Credentials not valid to continue with this test")
 
+
 def test_available_product():
     with launch_browser() as (browser, page):
         lg_page = login_page.LoginPage(page)
-        inv_page = inventory_page.InventoryPage(page) 
+        inv_page = inventory_page.InventoryPage(page)
         page.goto(baseUrl)
         valid_credentials = login_test_data.get("valid")
         if valid_credentials:
@@ -78,6 +81,7 @@ def test_available_product():
             assert actual_onesie_text.inner_text() == expected_onesie_text, f"Name mismatch. Expected: {expected_onesie_text}, Actual: {actual_onesie_text}"
         else:
             logging.info("Credentials not valid to continue with this test")
+
 
 def test_checkout_fleece_jacket():
     with launch_browser() as (browser, page):
@@ -100,7 +104,7 @@ def test_checkout_fleece_jacket():
             expected_price_cart_data = get_cart_data["price"]
             cart_price = shp_page.get_price_text()
             cart_quantity = shp_page.get_quantity_in_cart()
-            assert cart_price.inner_text() == expected_price_cart_data, f"Price mismatch. Expected: {expected_price_cart_data}, actual: {cart_price}"
-            assert cart_quantity.inner_text() == expected_quantity_cart_data, f"Quantity mismatch. Expected: {expected_quantity_cart_data}, actual: {cart_quantity}" 
+            assert cart_price.inner_text() == expected_price_cart_data, f"Price mismatch. Expected: {expected_price_cart_data}, actual: {cart_price} "
+            assert cart_quantity.inner_text() == expected_quantity_cart_data, f"Quantity mismatch. Expected: {expected_quantity_cart_data}, actual: {cart_quantity}"
         else:
             logging.info("Credentials not valid to continue with this test")
